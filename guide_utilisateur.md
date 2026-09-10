@@ -59,9 +59,18 @@ C'est la voie normale : un lot par mois, tous les salariés dedans.
 **Paie → Lots de bulletins de paie → Nouveau.** Nommer le lot — « Paie 09/2026 » —, fixer
 la période du 1er au dernier jour du mois, puis **Générer les bulletins de paie**.
 
-Une fenêtre s'ouvre et demande les salariés. **Elle n'en propose aucun** : la liste
-s'ouvre vide, rien n'est coché d'avance. Cochez la case en haut de la liste pour les
-prendre tous, puis **Générer**.
+![Le lot du mois](captures/11-lot-bulletins.png)
+
+Une fenêtre s'ouvre et demande les salariés. **Elle n'en propose aucun** : la liste est
+vide.
+
+![La fenêtre de génération](captures/12-generer-bulletins.png)
+
+Cliquez **Ajouter une ligne** : la liste des salariés s'ouvre. La case en tête de colonne
+les coche tous d'un coup, puis **Sélectionner** les ramène dans la fenêtre. Il ne reste
+qu'à cliquer **Générer**.
+
+![Le choix des salariés](captures/13-choisir-salaries.png)
 
 Quatre choses à savoir, chacune constatée à l'usage :
 
