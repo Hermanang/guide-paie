@@ -140,32 +140,61 @@ figurent plus bas ; elles ne diminuent pas le net.
 
 ### Une absence se saisit en congé, pas au bulletin
 
-N'écrivez pas le nombre de jours dans le bulletin : enregistrez l'absence comme un congé,
-et le bulletin suivra tout seul. **Congés → Nouveau**, le salarié, le type, les dates —
-puis approuvez.
+Dans le bulletin, la grille des jours travaillés est **en lecture seule**. Ce n'est pas une
+restriction arbitraire : ces jours se déduisent du contrat et des congés approuvés, et le
+calcul les reconstruit à chaque fois. Y inscrire vingt-cinq jours n'aurait aucun effet — la
+paie ne bougerait pas et le chiffre reviendrait à trente au recalcul suivant. La paie
+d'Odoo verrouille cette grille pour la même raison.
 
-Au calcul du bulletin, l'absence apparaît sur sa propre ligne, à côté du travail effectif,
-et le salaire baisse à proportion.
+Une absence se corrige donc **à sa source**.
+
+#### La marche à suivre
+
+1. **Congés → Nouveau.**
+2. Choisir le **salarié**.
+3. Choisir le **type de congé** — c'est lui qui décide de l'effet sur la paie, voir le
+   tableau ci-dessous.
+4. Saisir les **dates**, de la première à la dernière journée d'absence.
+5. **Approuver.** Tant que la demande est en attente, elle ne compte pas : une absence non
+   approuvée n'ampute aucune paie.
+
+![Une absence approuvée](captures/21-conge-absence.png)
+
+La barre d'état doit afficher **Approuvé**. C'est le seul point de contrôle : une demande
+restée « À approuver » sera ignorée par le bulletin, sans avertissement.
+
+Rien d'autre à faire. Au calcul du bulletin, l'absence apparaît sur sa propre ligne, à côté
+du travail effectif, et le salaire baisse à proportion.
+
+#### Quel type choisir
+
+| Situation | Type de congé | Effet sur la paie |
+|---|---|---|
+| Le salarié prend ses congés annuels | **Congé annuel** | aucun — salaire maintenu |
+| Absence injustifiée, ou congé sans solde accordé | **Absence non rémunérée** | le salaire baisse d'autant |
+| Arrêt maladie | **Congé maladie** | selon le taux réglé — voir la réserve plus bas |
+| Congé de maternité | **Congé de maternité** | salaire maintenu |
+| Mariage, naissance, décès — permissions de l'article 27 de la convention | **Permission exceptionnelle** | salaire maintenu |
+
+> **Le congé annuel exige un compteur ouvert.** Odoo refuse la demande si le salarié n'a
+> pas d'attribution — c'est ce qui l'empêche de prendre plus de jours qu'il n'en a acquis.
+> L'absence non rémunérée, elle, se pose sans compteur.
+
+> **Le congé maladie est réglé sur un maintien intégral.** La convention collective prévoit
+> un maintien qui décroît avec la durée de l'arrêt et l'ancienneté du salarié. Ce réglage
+> est donc **à trancher par l'employeur**, puis à porter dans le type de congé.
 
 ![L'absence au bulletin](captures/18-absence-bulletin.png)
 
-Deux jours d'absence, et le travail effectif tombe à 28 jours : le total reste de 30,
-mais seuls 28 sont payés. Trois jours d'absence non rémunérée retirent trois
-trentièmes du mois. Les cotisations et l'impôt suivent : une absence allège les charges
-autant que la paie.
+Deux jours d'absence, et le travail effectif tombe à 28 jours : le total reste de 30, mais
+seuls 28 sont payés. La retenue est donc de deux trentièmes du mois. Les cotisations et
+l'impôt suivent — une absence allège les charges autant que la paie.
 
-| Type de congé | Effet sur la paie |
-|---|---|
-| Congé annuel | aucun — le salaire est maintenu |
-| Absence non rémunérée | le salaire baisse d'autant |
-| Congé maladie, maternité, permission | selon le taux réglé en configuration |
+#### Changer l'effet d'un type de congé
 
-Ce comportement se règle par type, dans **Congés → Configuration → Types de congés**,
-champ **Maintien du salaire** : 1 pour un congé payé, 0 pour une absence sèche, 0,5 pour
-une demi-solde.
-
-> Un congé annuel exige un compteur ouvert : Odoo refuse la demande si le salarié n'a pas
-> d'attribution. Une absence non rémunérée, elle, se pose sans compteur.
+**Congés → Configuration → Types de congés**, champ **Maintien du salaire** : 1 pour un
+congé payé, 0 pour une absence sèche, 0,5 pour une demi-solde. Le réglage vaut pour tous
+les salariés et pour les bulletins calculés ensuite.
 
 ### Une avance sur salaire se déclare une fois
 
@@ -361,5 +390,6 @@ Juillet et les mois antérieurs se clôtureront alors sans écriture.
 | Le lot est fermé mais les états sont vides | **Fermer** n'est pas **Mark As Done** : les bulletins sont restés en brouillon |
 | Aucune écriture comptable après confirmation | La date « Comptabiliser la paie à partir du » est postérieure à la période du bulletin |
 | Une absence ne réduit pas la paie | Le congé n'est pas approuvé, ou son **Maintien du salaire** vaut 1 |
+| Impossible de saisir les jours travaillés | C'est voulu : la grille se déduit des congés. Voir la section 4 |
 | Une avance ne se retient pas | Elle est restée en brouillon : il faut la **Mettre en cours** |
 | Le simulateur ne donne pas le même net que le bulletin | Mode **Profil hypothétique** employé sur un salarié déjà payé cette année : passez en **Salarié existant** |
